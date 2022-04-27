@@ -8,16 +8,16 @@
 import Foundation
 
 extension HTTP {
-	/// A wrapper for any `Encodable`.
-	public struct AnyEncodable: Encodable {
-		private let encodable: Encodable
+  /// A wrapper for any `Encodable`.
+  public struct AnyEncodable: Encodable {
+    private let encodable: Encodable
 
-		public init<T: Encodable>(_ encodable: T) {
-			self.encodable = encodable
-		}
+    public init<T: Encodable>(_ encodable: T) {
+      self.encodable = encodable
+    }
 
-		public func encode(to encoder: Encoder) throws {
-			try encodable.encode(to: encoder)
-		}
-	}
+    public func encode(to encoder: Encoder) throws {
+      try encodable.encode(to: encoder)
+    }
+  }
 }

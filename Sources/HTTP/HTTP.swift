@@ -10,5 +10,5 @@ import Foundation
 public enum HTTP {}
 
 extension Bundle {
-	public static let http: Bundle = Bundle.module
+  public static let http: Bundle = Bundle.module
 }
