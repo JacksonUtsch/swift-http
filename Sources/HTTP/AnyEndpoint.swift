@@ -15,7 +15,7 @@ extension HTTP {
     public var method: Method
     public var route: String
     public var headers: [String: String]
-    public var body: AnyEncodable?
+    public var body: (any Encodable)?
 
     public init<T: HTTPEndpoint>(_ contents: T) {
       self.method = contents.method
@@ -28,7 +28,7 @@ extension HTTP {
       method: HTTP.Method,
       route: String,
       headers: [String: String] = [:],
-      body: HTTP.AnyEncodable? = nil
+      body: (any Encodable)? = nil
     ) {
       self.method = method
       self.route = route

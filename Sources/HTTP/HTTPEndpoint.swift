@@ -12,5 +12,5 @@ public protocol HTTPEndpoint {
   var method: HTTP.Method { get }
   var route: String { get }
   var headers: [String: String] { get }
-  var body: HTTP.AnyEncodable? { get }
+  var body: (any Encodable)? { get }
 }
