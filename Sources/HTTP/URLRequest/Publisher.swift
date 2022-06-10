@@ -53,37 +53,37 @@ extension HTTP {
       }
     }
 
-		if E.ResponseType.self == Data.self {
-			return URLSession.shared.dataTaskPublisher(for: request)
-				.tryMap { output -> Data in
-					if let dataReps = String(data: output.data, encoding: .utf8) {
-						dprint("Data as utf8")
-						dprint(dataReps)
-					} else {
-						dprint("Unable to parse as utf8")
-					}
-					return output.data
-				}
-				.tryMap { data in
-					if let error = catching(data) {
-						throw Errors.caught(error)
-					}
-					return data as! E.ResponseType
-				}
-				.mapError({ (error: Error) -> Error in
-					if let error = error as? URLError {
-						return Errors<F>.urlError(error)
-					}
-					return error
-				})
-				.mapError { error in
-					if let error = error as? Errors<F> {
-						return error
-					} else {
-						return .uncaught(error)
-					}
-				}.eraseToAnyPublisher()
-		}
+    if E.ResponseType.self == Data.self {
+      return URLSession.shared.dataTaskPublisher(for: request)
+        .tryMap { output -> Data in
+          if let dataReps = String(data: output.data, encoding: .utf8) {
+            dprint("Data as utf8")
+            dprint(dataReps)
+          } else {
+            dprint("Unable to parse as utf8")
+          }
+          return output.data
+        }
+        .tryMap { data in
+          if let error = catching(data) {
+            throw Errors.caught(error)
+          }
+          return data as! E.ResponseType
+        }
+        .mapError({ (error: Error) -> Error in
+          if let error = error as? URLError {
+            return Errors<F>.urlError(error)
+          }
+          return error
+        })
+        .mapError { error in
+          if let error = error as? Errors<F> {
+            return error
+          } else {
+            return .uncaught(error)
+          }
+        }.eraseToAnyPublisher()
+    }
 
     return URLSession.shared.dataTaskPublisher(for: request)
       .tryMap { output -> Data in

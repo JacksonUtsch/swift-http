@@ -10,7 +10,7 @@ final class AsyncTest: XCTestCase {
         at: "http://api.plos.org/",
         with: HTTP.AnyEndpoint<Data>(method: .get, route: "search?q=title:DNA"),
         catching: { (_) -> Never? in nil },
-				dumping: true
+        dumping: true
       )
       print("Got result: \(result)")
     } catch {
