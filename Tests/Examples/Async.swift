@@ -8,10 +8,11 @@ final class AsyncTest: XCTestCase {
     do {
       let result = try await HTTP.async(
         at: "http://api.plos.org/",
-        with: HTTP.AnyEndpoint<[String: String]>(method: .get, route: "search?q=title:DNA"),
-        catching: { (_) -> Never? in nil }
+        with: HTTP.AnyEndpoint<Data>(method: .get, route: "search?q=title:DNA"),
+        catching: { (_) -> Never? in nil },
+				dumping: true
       )
-      print("Got result: \(result.keys)")
+      print("Got result: \(result)")
     } catch {
       XCTFail("Found Error: \(error)")
     }
