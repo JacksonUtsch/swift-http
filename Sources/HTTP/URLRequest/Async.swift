@@ -63,6 +63,10 @@ extension HTTP {
       throw Errors.caught(error)
     }
 
+		if E.ResponseType.self == Data.self {
+			return data as! E.ResponseType
+		}
+
     do {
       let response = try JSONDecoder().decode(E.ResponseType.self, from: data)
       return response
