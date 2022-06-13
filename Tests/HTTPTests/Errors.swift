@@ -46,8 +46,8 @@ final class ErrorsTests: XCTestCase {
 
   func testDecodingError() {
     let testData = """
- {"abc":}
- """.data(using: .utf8)!
+      {"abc":}
+      """.data(using: .utf8)!
     do {
       _ = try JSONDecoder().decode(String.self, from: testData)
     } catch {
