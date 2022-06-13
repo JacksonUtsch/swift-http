@@ -72,7 +72,7 @@ extension HTTP {
         }
         .mapError({ (error: Error) -> Error in
           if let error = error as? URLError {
-            return Errors<F>.urlError(error)
+            return Errors<F>.url(error)
           }
           return error
         })
@@ -102,19 +102,14 @@ extension HTTP {
         return data
       }
       .decode(type: E.ResponseType.self, decoder: JSONDecoder())
-      .mapError({ (error: Error) -> Error in
+      .mapError({ (error: Error) -> Errors<F> in
         if let error = error as? URLError {
-          return Errors<F>.urlError(error)
+          return Errors<F>.url(error)
+        } else if let error = error as? DecodingError {
+          return Errors<F>.decoding(error)
         }
-        return error
+        return .uncaught(error)
       })
-      .mapError { error in
-        if let error = error as? Errors<F> {
-          return error
-        } else {
-          return .uncaught(error)
-        }
-      }
       .eraseToAnyPublisher()
   }
 }
