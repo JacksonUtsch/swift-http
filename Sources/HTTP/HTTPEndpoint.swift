@@ -7,8 +7,8 @@
 
 import Foundation
 
-public protocol HTTPEndpoint {
-  associatedtype ResponseType: Decodable
+public protocol HTTPEndpoint<ResponseType> where ResponseType: Decodable {
+	associatedtype ResponseType
   var method: HTTP.Method { get }
   var route: String { get }
   var headers: [String: String] { get }
