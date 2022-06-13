@@ -12,7 +12,8 @@ extension HTTP {
   public enum Errors<F: Error>: CustomStringConvertible, Hashable, LocalizedError {
     case invalidURL
     case encoding(EncodingError)
-    case urlError(URLError)
+    case decoding(DecodingError)
+    case url(URLError)
     case caught(F)
     case uncaught(Error)
 
@@ -22,8 +23,10 @@ extension HTTP {
         return "HTTP.Errors.invalidURL"
       case .encoding(let error):
         return "HTTP.Errors.encoding(\(error))"
-      case .urlError(let error):
-        return "HTTP.Errors.urlError(\(error))"
+      case .decoding(let error):
+        return "HTTP.Errors.decoding(\(error))"
+      case .url(let error):
+        return "HTTP.Errors.url(\(error))"
       case .caught(let error):
         return "HTTP.Errors.caught(\(error))"
       case .uncaught(let error):
@@ -38,7 +41,9 @@ extension HTTP {
           "HTTP.Errors.invalidURL", tableName: nil, bundle: .http, value: "", comment: "")
       case .encoding(let error):
         return error.localizedDescription
-      case .urlError(let error):
+      case .decoding(let error):
+        return error.localizedDescription
+      case .url(let error):
         return String(describing: error)
       case .caught(let error):
         return String(describing: error)

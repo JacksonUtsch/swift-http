@@ -44,14 +44,35 @@ final class ErrorsTests: XCTestCase {
     )
   }
 
+  func testDecodingError() {
+    let testData = """
+ {"abc":}
+ """.data(using: .utf8)!
+    do {
+      _ = try JSONDecoder().decode(String.self, from: testData)
+    } catch {
+      if let error = error as? DecodingError {
+        _ = HTTP.Errors<Never>.decoding(error)
+      } else {
+        XCTFail("Failed to cast decoding error")
+      }
+    }
+
+    let error = DecodingError.dataCorrupted(.init(codingPath: [], debugDescription: ""))
+    XCTAssertEqual(
+      error.localizedDescription,
+      "The data couldn’t be read because it isn’t in the correct format."
+    )
+  }
+
   func testURLError() {
     let urlError = URLError(URLError.badURL)
-    let error = HTTP.Errors<Never>.urlError(urlError)
+    let error = HTTP.Errors<Never>.url(urlError)
 
     XCTAssertEqual(
       error.description,
       """
-      			HTTP.Errors.urlError(URLError(_nsError: Error Domain=NSURLErrorDomain Code=-1000 "(null)"))
+      			HTTP.Errors.url(URLError(_nsError: Error Domain=NSURLErrorDomain Code=-1000 "(null)"))
       			"""
     )
 

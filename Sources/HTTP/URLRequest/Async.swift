@@ -71,12 +71,8 @@ extension HTTP {
       let response = try JSONDecoder().decode(E.ResponseType.self, from: data)
       return response
     } catch {
-      if let error = error as? URLError {
-        throw Errors<F>.urlError(error)
-      }
-
-      if let error = error as? Errors<F> {
-        throw error
+      if let error = error as? DecodingError {
+        throw Errors<F>.decoding(error)
       } else {
         throw Errors<F>.uncaught(error)
       }
