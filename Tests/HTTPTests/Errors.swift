@@ -7,12 +7,12 @@ final class ErrorsTests: XCTestCase {
   func testInvalidURL() throws {
     XCTAssertEqual(
       "\(HTTP.Errors<Never>.invalidURL)",
-      "HTTP.Errors.invalidURL"
+      "invalidURL"
     )
 
     XCTAssertEqual(
       HTTP.Errors<Never>.invalidURL.description,
-      "HTTP.Errors.invalidURL"
+      "invalidURL"
     )
 
     XCTAssertEqual(
@@ -34,7 +34,7 @@ final class ErrorsTests: XCTestCase {
     XCTAssertEqual(
       error.description,
       """
-      			HTTP.Errors.encoding(invalidValue(Swift.Int, Swift.EncodingError.Context(codingPath: [], debugDescription: "", underlyingError: nil)))
+      			encoding(invalidValue(Swift.Int, Swift.EncodingError.Context(codingPath: [], debugDescription: "", underlyingError: nil)))
       			"""
     )
 
@@ -59,6 +59,14 @@ final class ErrorsTests: XCTestCase {
     }
 
     let error = DecodingError.dataCorrupted(.init(codingPath: [], debugDescription: ""))
+
+		XCTAssertEqual(
+			"\(error)",
+			"""
+			dataCorrupted(Swift.DecodingError.Context(codingPath: [], debugDescription: "", underlyingError: nil))
+			"""
+		)
+
     XCTAssertEqual(
       error.localizedDescription,
       "The data couldn’t be read because it isn’t in the correct format."
@@ -72,22 +80,30 @@ final class ErrorsTests: XCTestCase {
     XCTAssertEqual(
       error.description,
       """
-      			HTTP.Errors.url(URLError(_nsError: Error Domain=NSURLErrorDomain Code=-1000 "(null)"))
+      			url(URLError(_nsError: Error Domain=NSURLErrorDomain Code=-1000 "(null)"))
       			"""
     )
 
     XCTAssertEqual(
       error.localizedDescription,
-      """
-      			URLError(_nsError: Error Domain=NSURLErrorDomain Code=-1000 "(null)")
-      			"""
+				 """
+				 The operation couldn’t be completed. (NSURLErrorDomain error -1000.)
+				 """
     )
   }
 
   func testCaughtErrors() {
-    struct ServerError: Error, Codable {
+    struct ServerError: LocalizedError, Codable, CustomStringConvertible {
       var status: Int
       var message: String
+
+			var description: String {
+				"ServerError(status: \(status), message: \(message))"
+			}
+
+			var errorDescription: String? {
+				"ServerError(status: \(status), message: \(message))"
+			}
     }
     let caughtError = ServerError(status: 404, message: "Not Found")
     let error = HTTP.Errors<ServerError>.caught(caughtError)
@@ -95,37 +111,45 @@ final class ErrorsTests: XCTestCase {
     XCTAssertEqual(
       error.description,
       """
-      			HTTP.Errors.caught(ServerError(status: 404, message: "Not Found"))
+      			caught(ServerError(status: 404, message: Not Found))
       			"""
     )
 
     XCTAssertEqual(
       error.localizedDescription,
       """
-      			ServerError(status: 404, message: "Not Found")
+      			ServerError(status: 404, message: Not Found)
       			"""
     )
   }
 
   func testUncaughtError() {
-    struct ServerError: Error, Codable {
-      var status: Int
-      var message: String
-    }
+		struct ServerError: LocalizedError, Codable, CustomStringConvertible {
+			var status: Int
+			var message: String
+
+			var description: String {
+				"ServerError(status: \(status), message: \(message))"
+			}
+
+			var errorDescription: String? {
+				"ServerError(status: \(status), message: \(message))"
+			}
+		}
     let caughtError = ServerError(status: 404, message: "Not Found")
     let error = HTTP.Errors<ServerError>.uncaught(caughtError)
 
     XCTAssertEqual(
       error.description,
       """
-      			HTTP.Errors.uncaught(ServerError(status: 404, message: "Not Found"))
+      			uncaught(ServerError(status: 404, message: Not Found))
       			"""
     )
 
     XCTAssertEqual(
       error.localizedDescription,
       """
-      			ServerError(status: 404, message: "Not Found")
+      			ServerError(status: 404, message: Not Found)
       			"""
     )
   }

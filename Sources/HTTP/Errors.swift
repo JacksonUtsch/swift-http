@@ -20,17 +20,17 @@ extension HTTP {
     public var description: String {
       switch self {
       case .invalidURL:
-        return "HTTP.Errors.invalidURL"
+        return "invalidURL"
       case .encoding(let error):
-        return "HTTP.Errors.encoding(\(error))"
+        return "encoding(\(error))"
       case .decoding(let error):
-        return "HTTP.Errors.decoding(\(error))"
+        return "decoding(\(error))"
       case .url(let error):
-        return "HTTP.Errors.url(\(error))"
+        return "url(\(error))"
       case .caught(let error):
-        return "HTTP.Errors.caught(\(error))"
+        return "caught(\(error))"
       case .uncaught(let error):
-        return "HTTP.Errors.uncaught(\(error))"
+        return "uncaught(\(error))"
       }
     }
 
@@ -44,11 +44,11 @@ extension HTTP {
       case .decoding(let error):
         return error.localizedDescription
       case .url(let error):
-        return String(describing: error)
+				return error.localizedDescription
       case .caught(let error):
-        return String(describing: error)
+				return error.localizedDescription
       case .uncaught(let error):
-        return String(describing: error)
+				return error.localizedDescription
       }
     }
 
