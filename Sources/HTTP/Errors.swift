@@ -44,11 +44,11 @@ extension HTTP {
       case .decoding(let error):
         return error.localizedDescription
       case .url(let error):
-				return error.localizedDescription
+        return error.localizedDescription
       case .caught(let error):
-				return error.localizedDescription
+        return error.localizedDescription
       case .uncaught(let error):
-				return error.localizedDescription
+        return error.localizedDescription
       }
     }
 

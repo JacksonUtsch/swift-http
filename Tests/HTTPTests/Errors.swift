@@ -60,12 +60,12 @@ final class ErrorsTests: XCTestCase {
 
     let error = DecodingError.dataCorrupted(.init(codingPath: [], debugDescription: ""))
 
-		XCTAssertEqual(
-			"\(error)",
-			"""
-			dataCorrupted(Swift.DecodingError.Context(codingPath: [], debugDescription: "", underlyingError: nil))
-			"""
-		)
+    XCTAssertEqual(
+      "\(error)",
+      """
+      			dataCorrupted(Swift.DecodingError.Context(codingPath: [], debugDescription: "", underlyingError: nil))
+      			"""
+    )
 
     XCTAssertEqual(
       error.localizedDescription,
@@ -86,9 +86,9 @@ final class ErrorsTests: XCTestCase {
 
     XCTAssertEqual(
       error.localizedDescription,
-				 """
-				 The operation couldn’t be completed. (NSURLErrorDomain error -1000.)
-				 """
+      """
+      				 The operation couldn’t be completed. (NSURLErrorDomain error -1000.)
+      				 """
     )
   }
 
@@ -97,13 +97,13 @@ final class ErrorsTests: XCTestCase {
       var status: Int
       var message: String
 
-			var description: String {
-				"ServerError(status: \(status), message: \(message))"
-			}
+      var description: String {
+        "ServerError(status: \(status), message: \(message))"
+      }
 
-			var errorDescription: String? {
-				"ServerError(status: \(status), message: \(message))"
-			}
+      var errorDescription: String? {
+        "ServerError(status: \(status), message: \(message))"
+      }
     }
     let caughtError = ServerError(status: 404, message: "Not Found")
     let error = HTTP.Errors<ServerError>.caught(caughtError)
@@ -124,18 +124,18 @@ final class ErrorsTests: XCTestCase {
   }
 
   func testUncaughtError() {
-		struct ServerError: LocalizedError, Codable, CustomStringConvertible {
-			var status: Int
-			var message: String
+    struct ServerError: LocalizedError, Codable, CustomStringConvertible {
+      var status: Int
+      var message: String
 
-			var description: String {
-				"ServerError(status: \(status), message: \(message))"
-			}
+      var description: String {
+        "ServerError(status: \(status), message: \(message))"
+      }
 
-			var errorDescription: String? {
-				"ServerError(status: \(status), message: \(message))"
-			}
-		}
+      var errorDescription: String? {
+        "ServerError(status: \(status), message: \(message))"
+      }
+    }
     let caughtError = ServerError(status: 404, message: "Not Found")
     let error = HTTP.Errors<ServerError>.uncaught(caughtError)
 
