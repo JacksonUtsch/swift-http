@@ -79,3 +79,86 @@ extension HTTP {
     }
   }
 }
+
+extension HTTP {
+	@available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
+	public static func asyncResult<E: HTTPEndpoint, F: Error>(
+		at base: String,
+		with endpoint: E,
+		including standardHeaders: [String: String] = [:],
+		catching: @escaping (Data) -> F?,
+		dumping: Bool = false
+	) async -> Result<E.ResponseType, Errors<F>> {
+		func dprint(_ contents: Any) {
+			if dumping { print(contents) }
+		}
+
+		dprint("\n" + endpoint.method.value)
+		dprint("URL: \(base + endpoint.route)")
+		guard let url = URL(string: base + endpoint.route) else {
+			return .failure(.invalidURL)
+		}
+
+		var request = URLRequest(url: url)
+		do {
+			request.httpMethod = endpoint.method.value
+			request.allHTTPHeaderFields = endpoint.headers.merging(
+				standardHeaders, uniquingKeysWith: { (first, _) in first })
+
+			if let body = endpoint.body {
+				request.httpBody = try JSONEncoder().encode(body)
+			}
+
+			dprint("Headers: " + request.allHTTPHeaderFields!.description)
+			if let body = request.httpBody {
+				dprint("Body: " + String(data: body, encoding: .utf8)!)
+			}
+
+			dprint("\n")
+		} catch {
+			if let error = error as? EncodingError {
+				return .failure(.encoding(error))
+			} else {
+				return .failure(.uncaught(error))
+			}
+		}
+
+    var data: Data?
+    do {
+      let dataResult = try await URLSession.shared.data(for: request, delegate: .none).0
+      data = dataResult
+    } catch let error as URLError {
+      return .failure(.url(error))
+    } catch {
+      return .failure(.uncaught(error))
+    }
+
+    guard let data = data else { fatalError() }
+
+    if let dataReps = String(data: data, encoding: .utf8) {
+      dprint("Data as utf8")
+      dprint(dataReps)
+    } else {
+      dprint("Unable to parse as utf8")
+    }
+
+    if let error = catching(data) {
+      return .failure(.caught(error))
+    }
+
+    if E.ResponseType.self == Data.self {
+      return .success(data as! E.ResponseType)
+    }
+
+    do {
+      let response = try JSONDecoder().decode(E.ResponseType.self, from: data)
+      return .success(response)
+    } catch {
+      if let error = error as? DecodingError {
+        return .failure(Errors<F>.decoding(error))
+      } else {
+        return .failure(Errors<F>.uncaught(error))
+      }
+    }
+	}
+}
