@@ -81,47 +81,47 @@ extension HTTP {
 }
 
 extension HTTP {
-	@available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
-	public static func asyncResult<E: HTTPEndpoint, F: Error>(
-		at base: String,
-		with endpoint: E,
-		including standardHeaders: [String: String] = [:],
-		catching: @escaping (Data) -> F?,
-		dumping: Bool = false
-	) async -> Result<E.ResponseType, Errors<F>> {
-		func dprint(_ contents: Any) {
-			if dumping { print(contents) }
-		}
+  @available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
+  public static func asyncResult<E: HTTPEndpoint, F: Error>(
+    at base: String,
+    with endpoint: E,
+    including standardHeaders: [String: String] = [:],
+    catching: @escaping (Data) -> F?,
+    dumping: Bool = false
+  ) async -> Result<E.ResponseType, Errors<F>> {
+    func dprint(_ contents: Any) {
+      if dumping { print(contents) }
+    }
 
-		dprint("\n" + endpoint.method.value)
-		dprint("URL: \(base + endpoint.route)")
-		guard let url = URL(string: base + endpoint.route) else {
-			return .failure(.invalidURL)
-		}
+    dprint("\n" + endpoint.method.value)
+    dprint("URL: \(base + endpoint.route)")
+    guard let url = URL(string: base + endpoint.route) else {
+      return .failure(.invalidURL)
+    }
 
-		var request = URLRequest(url: url)
-		do {
-			request.httpMethod = endpoint.method.value
-			request.allHTTPHeaderFields = endpoint.headers.merging(
-				standardHeaders, uniquingKeysWith: { (first, _) in first })
+    var request = URLRequest(url: url)
+    do {
+      request.httpMethod = endpoint.method.value
+      request.allHTTPHeaderFields = endpoint.headers.merging(
+        standardHeaders, uniquingKeysWith: { (first, _) in first })
 
-			if let body = endpoint.body {
-				request.httpBody = try JSONEncoder().encode(body)
-			}
+      if let body = endpoint.body {
+        request.httpBody = try JSONEncoder().encode(body)
+      }
 
-			dprint("Headers: " + request.allHTTPHeaderFields!.description)
-			if let body = request.httpBody {
-				dprint("Body: " + String(data: body, encoding: .utf8)!)
-			}
+      dprint("Headers: " + request.allHTTPHeaderFields!.description)
+      if let body = request.httpBody {
+        dprint("Body: " + String(data: body, encoding: .utf8)!)
+      }
 
-			dprint("\n")
-		} catch {
-			if let error = error as? EncodingError {
-				return .failure(.encoding(error))
-			} else {
-				return .failure(.uncaught(error))
-			}
-		}
+      dprint("\n")
+    } catch {
+      if let error = error as? EncodingError {
+        return .failure(.encoding(error))
+      } else {
+        return .failure(.uncaught(error))
+      }
+    }
 
     var data: Data?
     do {
@@ -160,5 +160,5 @@ extension HTTP {
         return .failure(Errors<F>.uncaught(error))
       }
     }
-	}
+  }
 }
