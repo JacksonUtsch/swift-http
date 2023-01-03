@@ -10,7 +10,7 @@ import Foundation
 extension HTTP {
   /// A wrapper for any `Encodable`.
   public struct AnyEncodable: Encodable {
-    private let encodable: Encodable
+    public let encodable: Encodable
 
     public init<T: Encodable>(_ encodable: T) {
       self.encodable = encodable
