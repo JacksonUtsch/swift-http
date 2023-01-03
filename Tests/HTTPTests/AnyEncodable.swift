@@ -6,7 +6,8 @@ import XCTest
 final class AnyEncodableTests: XCTestCase {
   func testDictionaryCast() {
     let anyEncodable = HTTP.AnyEncodable(["letter": "a", "message": "plain text"])
-    XCTAssertEqual(anyEncodable.encodable as? [String: String], .some(["letter": "a", "message": "plain text"]))
+    XCTAssertEqual(
+      anyEncodable.encodable as? [String: String], .some(["letter": "a", "message": "plain text"]))
   }
 
   func testCustomCast() {
