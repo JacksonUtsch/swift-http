@@ -18,7 +18,8 @@ let package = Package(
     )
   ],
   dependencies: [
-    .package(url: "https://github.com/JacksonUtsch/URLSessionBackport.git", .upToNextMajor(from: "0.2.1")),
+    .package(
+      url: "https://github.com/JacksonUtsch/URLSessionBackport.git", .upToNextMajor(from: "0.2.1"))
   ],
   targets: [
     .target(
