@@ -6,6 +6,7 @@ import XCTest
 final class CombineTest: XCTestCase {
   var cancellables: Set<AnyCancellable> = []
 
+  @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
   func testMakeRequest() throws {
     let semaphore = DispatchSemaphore(value: 0)
     HTTP.publisher(

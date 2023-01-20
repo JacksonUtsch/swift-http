@@ -6,9 +6,10 @@
 //
 
 import Foundation
+import URLSessionBackport
 
 extension HTTP {
-  @available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
+  @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
   public static func async<E: HTTPEndpoint, F: Error>(
     at base: String,
     with endpoint: E,
@@ -50,7 +51,7 @@ extension HTTP {
       }
     }
 
-    let data = try await URLSession.shared.data(for: request, delegate: .none).0
+    let data = try await URLSession.shared.backport.data(for: request, delegate: .none).0
 
     if let dataReps = String(data: data, encoding: .utf8) {
       dprint("Data as utf8")
@@ -81,7 +82,7 @@ extension HTTP {
 }
 
 extension HTTP {
-  @available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
+  @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
   public static func asyncResult<E: HTTPEndpoint, F: Error>(
     at base: String,
     with endpoint: E,
@@ -125,7 +126,7 @@ extension HTTP {
 
     var data: Data?
     do {
-      let dataResult = try await URLSession.shared.data(for: request, delegate: .none).0
+      let dataResult = try await URLSession.shared.backport.data(for: request, delegate: .none).0
       data = dataResult
     } catch let error as URLError {
       return .failure(.url(error))
