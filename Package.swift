@@ -17,11 +17,15 @@ let package = Package(
       targets: ["HTTP"]
     )
   ],
-  dependencies: [],
+  dependencies: [
+    .package(url: "https://github.com/JacksonUtsch/URLSessionBackport.git", .upToNextMajor(from: "0.2.1")),
+  ],
   targets: [
     .target(
       name: "HTTP",
-      dependencies: [],
+      dependencies: [
+        .product(name: "URLSessionBackport", package: "URLSessionBackport")
+      ],
       resources: [.process("Resources")]
     ),
     .testTarget(

@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "URLSessionBackport",
+        "repositoryURL": "https://github.com/JacksonUtsch/URLSessionBackport.git",
+        "state": {
+          "branch": null,
+          "revision": "8208e1542539c23cb6c21351d510fa58e58662ee",
+          "version": "0.2.1"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

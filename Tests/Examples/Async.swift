@@ -3,7 +3,7 @@ import XCTest
 @testable import HTTP
 
 final class AsyncTest: XCTestCase {
-  @available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
+  @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
   func testMakeRequest() async {
     do {
       let result = try await HTTP.async(
@@ -18,7 +18,7 @@ final class AsyncTest: XCTestCase {
     }
   }
 
-  @available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
+  @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
   func testMakeRequestResult() async {
     let result = await HTTP.asyncResult(
       at: "http://api.plos.org/",
