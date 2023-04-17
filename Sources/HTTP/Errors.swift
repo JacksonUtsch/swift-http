@@ -9,7 +9,7 @@ import Foundation
 
 extension HTTP {
   /// The HTTP error type. Made generic using a custom error type for catching server formatted errors.
-  public enum Errors<F: Error>: CustomStringConvertible, Hashable, LocalizedError {
+  public enum Errors<F: Error>: CustomStringConvertible, Hashable, LocalizedError, Sendable {
     case invalidURL
     case encoding(EncodingError)
     case decoding(DecodingError)

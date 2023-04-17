@@ -9,7 +9,7 @@ import Foundation
 
 extension HTTP {
   /// A wrapper for any `Encodable`.
-  public struct AnyEncodable: Encodable {
+  public struct AnyEncodable: Encodable, Sendable {
     public let encodable: Encodable
 
     public init<T: Encodable>(_ encodable: T) {
