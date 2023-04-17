@@ -10,7 +10,7 @@ import Foundation
 extension HTTP {
   /// A wrapper for any `HTTPEndpoint`. To construct, a `HTTPEndpoint`
   /// type can be used or properties can be given directly in the initializer.
-  public struct AnyEndpoint<V: Decodable>: HTTPEndpoint {
+  public struct AnyEndpoint<V: Decodable>: HTTPEndpoint, Sendable {
     public typealias ResponseType = V
     public var method: Method
     public var route: String

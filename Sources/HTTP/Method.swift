@@ -8,7 +8,7 @@
 import Foundation
 
 extension HTTP {
-  public enum Method: String, Codable {
+  public enum Method: String, Codable, Sendable {
     case get, head, post, put, delete, connect, options, trace, patch
 
     public var value: String {
